@@ -198,14 +198,15 @@ export interface BaseWorkerProps<
   /**
    * Whether to enable preview URLs for this worker.
    *
-   * Must be set to `false` when the worker uses Durable Objects, otherwise
-   * the Cloudflare API will reject the upload with error code 100331.
+   * Preview URLs are not supported for Workers that use Durable Objects.
+   * Set to `false` when using Durable Objects.
    *
-   * Only included in the upload metadata when explicitly set.
+   * When not set, defaults to the value of the `url` prop (matching
+   * Wrangler's behavior where `preview_urls` defaults to `workers_dev`).
    *
-   * @see https://developers.cloudflare.com/workers/configuration/previews/#limitations
+   * @see https://developers.cloudflare.com/workers/configuration/previews/
    */
-  previews_enabled?: boolean;
+  preview_urls?: boolean;
 
   /**
    * Whether to adopt the Worker if it already exists when creating
@@ -1526,6 +1527,7 @@ async function provisionResources<B extends Bindings>(
         ? WorkerSubdomain("url", {
             scriptName: options.name,
             previewVersionId: props.version ? options.result?.id : undefined,
+            previewsEnabled: props.preview_urls,
             retain: !!props.version,
             dev: options.local,
             ...input.api,
