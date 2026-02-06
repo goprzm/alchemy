@@ -204,6 +204,7 @@ export interface WorkerMetadata {
     };
   };
   logpush?: boolean;
+  previews_enabled?: boolean;
   migrations?: SingleStepMigration;
   main_module?: string;
   body_part?: string;
@@ -352,6 +353,9 @@ export async function prepareWorkerMetadata(
       enabled: observability?.enabled !== false,
     },
     logpush: props.logpush ?? false,
+    ...(props.previews_enabled !== undefined && {
+      previews_enabled: props.previews_enabled,
+    }),
     // TODO(sam): base64 encode instead? 0 collision risk vs readability.
     tags: [
       // encode a mapping table of Durable Object stable ID -> binding name

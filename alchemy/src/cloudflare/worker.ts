@@ -196,6 +196,18 @@ export interface BaseWorkerProps<
   logpush?: boolean;
 
   /**
+   * Whether to enable preview URLs for this worker.
+   *
+   * Must be set to `false` when the worker uses Durable Objects, otherwise
+   * the Cloudflare API will reject the upload with error code 100331.
+   *
+   * Only included in the upload metadata when explicitly set.
+   *
+   * @see https://developers.cloudflare.com/workers/configuration/previews/#limitations
+   */
+  previews_enabled?: boolean;
+
+  /**
    * Whether to adopt the Worker if it already exists when creating
    */
   adopt?: boolean;
